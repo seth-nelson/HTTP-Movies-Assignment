@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import MovieCard from "./MovieCard";
 
 function Movie({ addToSavedList }) {
@@ -8,6 +9,7 @@ function Movie({ addToSavedList }) {
   const params = useParams();
 
   const fetchMovie = (id) => {
+
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
       .then((res) => setMovie(res.data))
@@ -32,6 +34,9 @@ function Movie({ addToSavedList }) {
 
       <div className="save-button" onClick={saveMovie}>
         Save
+      </div>
+      <div className='edit-btn'>
+        <Link to={`/update-movie/${params.id}`}>Edit Movie</Link>
       </div>
     </div>
   );
