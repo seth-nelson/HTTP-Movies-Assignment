@@ -8,10 +8,10 @@ function Movie({ addToSavedList }) {
   const [movie, setMovie] = useState(null);
   const params = useParams();
 
-  const fetchMovie = (id) => {
+  const fetchMovie = () => {
 
     axios
-      .get(`http://localhost:5000/api/movies/${id}`)
+      .get(`http://localhost:5000/api/movies/${params.id}`)
       .then((res) => setMovie(res.data))
       .catch((err) => console.log(err.response));
   };

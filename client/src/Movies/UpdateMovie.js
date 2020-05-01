@@ -7,7 +7,7 @@ const initialMovie = {
     id: '',
     title: '',
     director: '',
-    metascore: '',
+    metascore: 0,
     stars: []
 };
 
@@ -16,32 +16,39 @@ const UpdateMovie = props => {
 
     const [ movie, setMovie ] = useState(initialMovie);
 
-    const { id } = useParams();
-
-    useEffect(() => {
-        axios
-            .get(`http://localhost:5000/api/movies/${id}`)
-            .then(res => setMovie(res.data))
-            .catch(err => console.error('error getting movies for update', err));
-    }, [id]);
+    const params = useParams();
 
     const handleChanges = e => {
         setMovie({ ...movie, [e.target.name]: e.target.value });
     };
 
-    const submitForm = e => {
+    //Don't make axios a useEffect. This is just for a data pull
+    //Use this function to run a useEffect function seperately
+    useEffect(() => {
+        axios
+            .get(`http://localhost:5000/api/movies/${params.id}`)
+            .then(res => setMovie(res.data))
+            .catch(err => console.error('error getting movies for update', err));
+    }, []);
+    
+    //Function to run a side effect when you get the current data
+    // useEffect(() => {
+    //     getMovies(params.id);
+    // }, [params.id]);
+
+
+    const handleSubmit = e => {
         e.preventDefault();
         axios
-            .put(`http://localhost:5000/api/movies/${id}`, movie)
-            .then( res => setMovie(initialMovie))
-                props.history.push('/')
+            .put(`http://localhost:5000/api/movies/${params.id}`, movie)
+            .then(() => props.history.push('/'))
             .catch(err => console.error('error updating movie', err));
     };
 
 
     return (
         <div className='update-form-container'>
-            <form onSubmit={submitForm}>
+            <form onSubmit={handleSubmit}>
                 <input 
                     type='text'
                     name='title'
